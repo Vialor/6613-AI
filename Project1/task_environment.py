@@ -8,7 +8,6 @@ class TaskEnvironment:
     f.close()
 
     self.init_state, self.goal_state = self.deserialize(self.input_file)
-    self.cur_state = self.init_state
 
     # order = x + 3y + 9z
   def orderToPosition(self, order: int) -> Tuple[int, int, int]:

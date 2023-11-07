@@ -10,7 +10,7 @@ class Agent:
     self.node_count = 0
     self.frontier = [(0, task_environment.init_state)] # priority queue: (f=g+h, Cube)
 
-  def act(self,curState: Cube, direction) -> Cube:
+  def act(self, curState: Cube, direction) -> Cube:
     # if state has been visited # Maybe check against node_history? also check if move is valid
     ## return None
     # else
@@ -36,10 +36,10 @@ class Agent:
       pass
     return curState
   
-  def expand(self, direction: int) -> List[Cube]:
+  def expand(self, cur_state: Cube) -> List[Cube]:
     children = []
     for direction in DIRECTION.keys():
-      child = self.act(self.task_environment.curState, direction)
+      child = self.act(cur_state, direction)
       if child is not None:
         children.append(child)
     return children
