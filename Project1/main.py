@@ -6,14 +6,15 @@ def main():
     task_environment = TaskEnvironment(path) # sys.argv[0]
     agent = Agent(task_environment)
 
+
     while agent.frontier:
         cost, node = agent.popFrontier()
-        if task_environment.isGoal(node) == 0:
-            break
+        # print(node)
+        # if task_environment.isGoal(node) == 0:
+        #     return node
         for child in agent.expand(node):
-            agent.pushFrontier(child, cost + 1) 
+            agent.pushFrontier(child, cost + 1)
 
-    # if answer is found
     agent.output("outputs/Output1.txt")
 
 if __name__ == "__main__":
