@@ -8,8 +8,6 @@ def main():
     path = "test/Input1.txt"
     serialization_tool = Serialization()
     task_environment = TaskEnvironment(*serialization_tool.deserialize(path)) # sys.argv[0]
-    h = task_environment.calculateHeuristic(task_environment.init_state)
-    print(h)
     agent = Agent(task_environment)
 
     # while agent.frontier:
@@ -19,7 +17,7 @@ def main():
     #     for child in agent.expand(node):
     #         agent.pushFrontier(child, cost + 1)
 
-    # serialization_tool.serialize()
+    # serialization_tool.output(task_environment.goal_state, agent.node_history)
     
 
 if __name__ == "__main__":
