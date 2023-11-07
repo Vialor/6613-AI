@@ -6,17 +6,18 @@ from serialization import Serialization
 
 def main():
     serialization_tool = Serialization()
-    task_environment = TaskEnvironment(serialization_tool.deserialize(sys.argv[0]))
-    agent = Agent(task_environment)
+    serialization_tool.deserialize("test/Input1.txt") # sys.argv[0]
+    # task_environment = TaskEnvironment(serialization_tool.deserialize(sys.argv[0]))
+    # agent = Agent(task_environment)
 
-    while agent.frontier:
-        cost, node = agent.popFrontier()
-        if task_environment.isGoal(node) == 0:
-            return node
-        for child in agent.expand(node):
-            agent.pushFrontier(child, cost + 1)
+    # while agent.frontier:
+    #     cost, node = agent.popFrontier()
+    #     if task_environment.isGoal(node) == 0:
+    #         return node
+    #     for child in agent.expand(node):
+    #         agent.pushFrontier(child, cost + 1)
 
-    serialization_tool.serialize()
+    # serialization_tool.serialize()
     
 
 if __name__ == "__main__":
