@@ -27,7 +27,7 @@ class Agent:
         while i < 3:
 
             if tmp_list[i] < 0 or tmp_list[i] > 2:
-                pass
+                break
             i = i + 1
         tmp_tuple = tuple(tmp_list)
         try:
