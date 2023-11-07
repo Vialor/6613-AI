@@ -11,7 +11,6 @@ class TaskEnvironment:
     distance = 0
     for i in range(len(pos1)):
       distance += abs(pos1[i] - pos2[i])
-    print(distance)
     return distance
 
   def calculateHeuristic(self, state: Cube) -> int:

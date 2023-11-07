@@ -24,7 +24,7 @@ class Serialization:
       goal_state[int(num)] = self.orderToPosition(i)
     return init_state, goal_state
 
-  def calculateOptimalPath():
+  def calculateOptimalPath(self):
     pass
 
   def output(goal_state, node_history: dict):
