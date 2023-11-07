@@ -50,4 +50,13 @@ class Agent:
   def pushFrontier(self, newNode: Cube, parentCost: int):
     fValue = self.task_environment.calculateHeuristic(newNode) + parentCost
     heapq.push(self.frontier, (fValue, newNode))
-    
+  
+  def generateSolutions(self):
+    # self.task_environment.goal_state, self.node_history
+    return ''
+
+  def output(self, path):
+    f = open(path, "w")
+    f.write(self.task_environment.input_file + '\n\n')
+    f.write(self.generateSolutions())
+    f.close()

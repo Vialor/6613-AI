@@ -2,12 +2,10 @@ import heapq
 import sys
 from agent import Agent
 from task_environment import TaskEnvironment
-from serialization import Serialization
 
 def main():
     path = "test/Input1.txt"
-    serialization_tool = Serialization()
-    task_environment = TaskEnvironment(*serialization_tool.deserialize(path)) # sys.argv[0]
+    task_environment = TaskEnvironment(path) # sys.argv[0]
     agent = Agent(task_environment)
 
     # while agent.frontier:
@@ -15,10 +13,8 @@ def main():
     #     if task_environment.isGoal(node) == 0:
     #         return node
     #     for child in agent.expand(node):
-    #         agent.pushFrontier(child, cost + 1)
-
-    # serialization_tool.output(task_environment.goal_state, agent.node_history)
-    
+    #         agent.pushFrontier(child, cost + 1) 
+    agent.output("outputs/Output1.txt")
 
 if __name__ == "__main__":
     main()
