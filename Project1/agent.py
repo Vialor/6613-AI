@@ -10,13 +10,31 @@ class Agent:
     self.nodeCount = 0
     self.frontier = [(0, task_environment.init_state)] # priority queue: (f=g+h, Cube)
 
-  def act(curState: Cube, direction) -> Cube:
+  def act(self,curState: Cube, direction) -> Cube:
     # if state has been visited # Maybe check against node_history? also check if move is valid
     ## return None
     # else
     ## calculate child by exchanging elems in curState
     # return child
-    pass
+    tmp_list=[]
+    for pos in curState[0]:
+      for dir in direction:
+        if pos + dir > 2 or pos + dir < 0:
+          pass
+        else:
+          tmp_list.append(pos+dir)
+    tmp_tuple = tuple(tmp_list)
+    try:
+      index = curState.index(tmp_tuple)
+      tmp_tuple2 = curState[index]
+      curState[index] = curState[0]
+      curState[0] = tmp_tuple2
+    except ValueError:
+      print(f"{tmp_tuple} is not in the list.")
+
+    if curState in self.nodeHistory:
+      pass
+    return curState
   
   def expand(self, direction: int) -> List[Cube]:
     children = []
