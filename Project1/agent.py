@@ -39,7 +39,7 @@ class Agent:
             print(f"{tmp_tuple} is not in the list.")
 
         if tuple(curState) in self.node_history.keys():
-            pass
+            return None
         self.gValue = self.gValue + 1
         self.node_history[tuple(curState)] = [self.gValue, parent_cube, direction]
         print(curState)
