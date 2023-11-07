@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from interface import Cube
+from interface import CUBE_LENGTH, Cube
 
 class Serialization:
   # order = x + 3y + 9z
@@ -17,11 +17,10 @@ class Serialization:
     init_state = [-1] * 27
     goal_state = [-1] * 27
     nums = f.read().split()
-    for i, num in enumerate(nums[:27]):
+    for i, num in enumerate(nums[:CUBE_LENGTH]):
       init_state[int(num)] = self.orderToPosition(i)
-    for i, num in enumerate(nums[27:]):
+    for i, num in enumerate(nums[CUBE_LENGTH:]):
       goal_state[int(num)] = self.orderToPosition(i)
-    print(init_state, goal_state)
     return init_state, goal_state
 
   def calculateOptimalPath():

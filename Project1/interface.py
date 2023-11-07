@@ -1,6 +1,8 @@
 from typing import List, Tuple
 
-Cube = List[Tuple[int, int, int]] # [(x, y, z)], num -> position, length 27
+Position = Tuple[int, int, int] # [(x, y, z)]
+Cube = List[Position] # num -> position, length 27
+CUBE_LENGTH = 27
 DIRECTION = {
   'UP': (0, 0, -1),
   'DOWN': (0, 0, 1),
