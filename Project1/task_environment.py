@@ -16,7 +16,6 @@ class TaskEnvironment:
 
   def calculateHeuristic(self, state: Cube) -> int:
     heuristic = 0
-    # use state and self.goal_state
     for i in range(1, CUBE_LENGTH):
       heuristic += self.manhattan_distance(state[i], self.goal_state[i])
     return heuristic
