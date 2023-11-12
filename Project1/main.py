@@ -1,21 +1,24 @@
 from agent import Agent
 from task_environment import TaskEnvironment
+SRC_PATH = "test/Input1.txt"
+DEST_PATH = "outputs/Output1.txt"
 
 def main():
-    path = "test/Input1.txt"
-    task_environment = TaskEnvironment(path) # sys.argv[0]
+    task_environment = TaskEnvironment(SRC_PATH)
     agent = Agent(task_environment)
 
-
+    solutionFound = False
     while agent.frontier:
-        cost, node = agent.popFrontier()
-        # print(node)
-        # if task_environment.isGoal(node) == 0:
-        #     return node
+        node = agent.popFrontier()[1]
+        if task_environment.isGoal(node):
+            solutionFound = True
+            break
         for child in agent.expand(node):
-            agent.pushFrontier(child, cost + 1)
-
-    agent.output("outputs/Output1.txt")
+            agent.pushFrontier(child)
+    if solutionFound:
+        agent.output(DEST_PATH)
+    else:
+        print("No Solution!")
 
 if __name__ == "__main__":
     main()

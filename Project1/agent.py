@@ -1,73 +1,74 @@
 import heapq
-from typing import List
-from interface import DIRECTION, Cube
+from typing import List, Optional
+from interface import DIRECTION, Cube, Position
 
 
 class Agent:
-    def __init__(self, task_environment):
-        self.node_history = {}  # Cube: minmum total cost (g not f), parent Cube, last move direction
-        self.task_environment = task_environment
-        self.node_count = 0
-        self.frontier = [(0, task_environment.init_state)]  # priority queue: (f=g+h, Cube)
-        self.gValue = 0
+  def __init__(self, task_environment):
+    self.task_environment = task_environment
+    # keys: Cube state
+    # values: [g value, h value, parent Cube, last move direction]
+    self.node_history = {
+      hash(tuple(task_environment.init_state)): [0, task_environment.calculateHeuristic(task_environment.init_state), None, None]
+    }
+    self.node_count = 0
+    self.frontier = [(0, task_environment.init_state)] # priority queue: (f=g+h, Cube)
 
-    def act(self, curState: Cube, direction) -> Cube:
-        # if state has been visited # Maybe check against node_history? also check if move is valid
-        ## return None
-        # else
-        ## calculate child by exchanging elems in curState
-        # return child
-        parent_cube = curState
-        tmp_list = []
-        i = 0
-        while i < 3:
-            tmp_list.append(curState[0][i] + direction[i])
-            i = i + 1
-        i = 0
-        while i < 3:
+  ## FUNCTIONS TO EXPAND NODES ##
+  def act(self, cur_state: Cube, direction: str) -> Optional[Cube]:
+    cur_state = cur_state[:]
+    parent_hash = hash(tuple(cur_state))
+    offsets = DIRECTION[direction]
+    tmp_tuple = tuple((cur_state[0][i] + offsets[i] for i in range(len(offsets))))
+    if any([e > 2 or e < 0 for e in tmp_tuple]):
+      return None
+    index = cur_state.index(tmp_tuple)
+    cur_state[index], cur_state[0] = cur_state[0], cur_state[index]
+    if hash(tuple(cur_state)) in self.node_history.keys():
+      return None
+    self.node_count += 1
+    self.gValue = self.node_history[parent_hash][0] + 1
+    self.node_history[hash(tuple(cur_state))] = [self.gValue, self.task_environment.calculateHeuristic(cur_state), parent_hash, direction]
 
-            if tmp_list[i] < 0 or tmp_list[i] > 2:
-                break
-            i = i + 1
-        tmp_tuple = tuple(tmp_list)
-        try:
-            index = curState.index(tmp_tuple)
-            tmp_tuple2 = curState[index]
-            curState[index] = curState[0]
-            curState[0] = tmp_tuple2
-        except ValueError:
-            print(f"{tmp_tuple} is not in the list.")
+    return cur_state
 
-        if tuple(curState) in self.node_history.keys():
-            return None
-        self.gValue = self.gValue + 1
-        self.node_history[tuple(curState)] = [self.gValue, parent_cube, direction]
-        print(curState)
-        print("\n")
-        return curState
+  def expand(self, node):
+    children = []
+    for direction in DIRECTION.keys():
+      child = self.act(node, direction)
+      if child is not None:
+        children.append(child)
+    return children
 
-    def expand(self, node):
-        children = []
-        for direction in DIRECTION.values():
-            child = self.act(node, direction)
-            if child is not None:
-                children.append(child)
-        return children
+  ## FRONTIER MANIPULATION
+  def popFrontier(self) -> (int, Cube):
+    return heapq.heappop(self.frontier)
 
-    def popFrontier(self):
-        return heapq.heappop(self.frontier)
+  def pushFrontier(self, newNode: Cube):
+    record = self.node_history[hash(tuple(newNode))]
+    heapq.heappush(self.frontier, (record[0] + record[1], newNode))
 
-    def pushFrontier(self, newNode: Cube, parentCost: int):
-        fValue = self.task_environment.calculateHeuristic(newNode) + parentCost
-        heapq.heappush(self.frontier, (fValue, newNode))
+  ## OUTPUT HANDLERS ##
+  # calculate for the best solution: the number of steps, total nodes expnded, actions and f values along the path
+  def generateSolutions(self):
+    solution_fValues, solution_actions = [], []
+    cur_hash = hash(tuple(self.task_environment.goal_state))
+    root_hash = hash(tuple(self.task_environment.init_state))
+    while cur_hash != root_hash:
+      gValue, hValue, cur_hash, last_move = self.node_history[cur_hash]
+      solution_actions.append(last_move[0])
+      solution_fValues.append(str(gValue + hValue))
+    hValue = self.node_history[root_hash][1]
+    solution_fValues.append(str(hValue))
+    output = []
+    output.append(str(len(solution_actions)))
+    output.append(str(self.node_count))
+    output.append(' '.join(solution_actions[::-1]))
+    output.append(' '.join(solution_fValues[::-1]))
+    return '\n'.join(output)
 
-
-def generateSolutions(self):
-    # self.task_environment.goal_state, self.node_history
-    return ''
-
-
-def output(self, path):
+  # write the result to a file
+  def output(self, path):
     f = open(path, "w")
     f.write(self.task_environment.input_file + '\n\n')
     f.write(self.generateSolutions())
