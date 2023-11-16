@@ -1,7 +1,7 @@
 from agent import Agent
 from task_environment import TaskEnvironment
-SRC_PATH = "test/Input1.txt"
-DEST_PATH = "outputs/Output1.txt"
+SRC_PATH = "test/Input2.txt"
+DEST_PATH = "outputs/Output2.txt"
 
 def main():
     task_environment = TaskEnvironment(SRC_PATH)
