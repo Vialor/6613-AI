@@ -1,5 +1,4 @@
 from typing import List, Dict, Tuple, Callable
-from constraintHypergraph import Variable
 
 class Variable:
   def __init__(self, name: str):
@@ -7,6 +6,8 @@ class Variable:
     self.value = -1
     self.domain: Domain = []
     self.constraints: Constraints = []
+    self.MRV = 99
+    self.degree = 0
 
 class Constraint:
   def __init__(self):
