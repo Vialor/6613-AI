@@ -7,10 +7,7 @@ class Variable:
     self.name: str = name
     self.domain: Domain = domain
     self.constraints: Constraints = []
-
     self.value = -1
-    self.MRV = 99
-    self.degree = 0
     
 ConstraintFunction = Callable[[Dict[str, Variable]], bool]
 

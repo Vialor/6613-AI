@@ -1,10 +1,9 @@
-from testHelper import printVars
-from interface import CSP, Variable, Variables, Constraints
-from typing import Optional
+from interface import Variable
 from iotools import IOTools
+import sys
 
-INPUT_PATH = "../test/Input2.txt"
-OUTPUT_PATH = "../test/Output2.txt"
+INPUT_PATH = sys.argv[1]
+OUTPUT_PATH = sys.argv[2]
 
 
 def main():
@@ -16,57 +15,27 @@ def main():
     nonlocal CSP
     variables = CSP[0]
 
-    # MRV
-    # v in variables
-    # check v.domain
-    # produce potentialVars
-
-    # count = 0
-    # min = 99
-    # MRV_list = []
-    # for v in variables.values():
-    #   if v.value!=-1:
-    #     count+=1
-    # for v in variables.values():
-    #   v.MRV = len(v.domain)-count
-    #   print("MRV", v.MRV)
-    #   if v.MRV<min:
-    #     min = v.MRV
-    # for v in variables.values():
-    #   if v.value != -1 and v.MRV == min:
-    #     MRV_list.append(v.name)
-    potentialVars, minDomain = [], float("inf")
+    ## MRV
+    potentialVars, minMRV = [], float("inf")
     for v in variables.values():
-      if v.value == -1:
-        if len(v.domain) == minDomain:
-          potentialVars.append(v)
-        elif len(v.domain) < minDomain:
-          minDomain = len(v.domain)
-          potentialVars = [v]
-    # print([v.name for v in potentialVars])
+      if v.value != -1:
+        continue
+      # calculate MRV
+      MRV = len(v.domain)
+      for usedValue in variables.values():
+        if usedValue in v.domain:
+          MRV -= 1
+      # update potentialVars
+      if MRV == minMRV:
+        potentialVars.append(v)
+      elif MRV < minMRV:
+        minMRV = len(v.domain)
+        potentialVars = [v]
     if len(potentialVars) == 1:
       return potentialVars[0]
     
-    # degree heuristic
-    # for v in potentialVars
-    # check number of neighbors
-
-    # for key in MRV_list:
-    #   v = variables[key]
-    #   v.degree = 0
-    #   for constraint in v.constraints:
-    #     v.degree += len(constraint.variables)-1
-
-    # min_degree_var = None
-    # min_degree = 99
-    # for v in variables.values():
-    #   if min_degree > v.degree:
-    #     min_degree_var = v
-    #     min_degree = v.degree
-
-    # return min_degree_var
-    minDegreeVar = None
-    minNeighborCount = float("inf")
+    ## Degree heuristic
+    minDegreeVar, minNeighborCount = None, float("inf")
     for var in potentialVars:
       neighbors = set()
       for c in var.constraints:
@@ -82,11 +51,7 @@ def main():
     return all([constraint.evaluate(*constraint.variables) for constraint in variable.constraints])
   
   def solveCSP() -> bool:
-    nonlocal CSP
-    variables = CSP[0]
-  
     def backtrack() -> bool:
-      # printVars(variables)
       if isComplete():
         return True
       variable = getUnassignedVariable()

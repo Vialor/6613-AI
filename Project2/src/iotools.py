@@ -1,7 +1,5 @@
-from collections import defaultdict
-from typing import List
 from constraintFunction import allDiffConstraint, generateAdditionConstraint
-from interface import CSP, Constraint, Variables, Variable
+from interface import CSP, Constraint, Variable
 
 class IOTools:
   def __init__(self):
@@ -19,7 +17,7 @@ class IOTools:
     }
     ## letter variables:
     firstLetters = set([addend1[0], addend2[0], addsum[0]])
-    restLetters = set([c for c in self.file if c != "\n" and c not in firstLetters])
+    restLetters = set([c for c in self.file if c not in " \n" and c not in firstLetters])
     letterVars = []
     for c in firstLetters:
       variables[c] = Variable(name=c, domain=[i for i in range(1, 10)])

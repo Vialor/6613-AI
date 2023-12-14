@@ -1,4 +1,4 @@
-from interface import Variable, Variables
+from interface import Variable
 
 
 def allDiffConstraint(*vars: Variable):
