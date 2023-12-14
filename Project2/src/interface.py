@@ -1,21 +1,24 @@
 from typing import List, Dict, Tuple, Callable
 
+Domain = List[int] # List[int] should be sorted
+
 class Variable:
-  def __init__(self, name: str):
-    self.name = name
-    self.value = -1
-    self.domain: Domain = []
+  def __init__(self, name: str, domain: Domain):
+    self.name: str = name
+    self.domain: Domain = domain
     self.constraints: Constraints = []
+
+    self.value = -1
     self.MRV = 99
     self.degree = 0
+    
+ConstraintFunction = Callable[[Dict[str, Variable]], bool]
 
 class Constraint:
-  def __init__(self):
-    self.variables: Variables = []
-    self.evaluate: ConstraintFunction = lambda : True
+  def __init__(self, variables, evaluate):
+    self.variables: List[Variable] = variables
+    self.evaluate: ConstraintFunction = evaluate
 
-Domain = List[int] # List[int] should be sorted
-ConstraintFunction = Callable[[], bool]
 Variables = Dict[str, Variable]
 Constraints = List[Constraint]
 CSP = Tuple[Variables, Constraints]

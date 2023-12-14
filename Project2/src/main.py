@@ -3,7 +3,6 @@ from typing import Optional
 from iotools import IOTools
 
 
-
 def main():
   def isComplete() -> bool:
     nonlocal CSP
