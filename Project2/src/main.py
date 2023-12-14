@@ -1,3 +1,4 @@
+from testHelper import printVars
 from interface import CSP, Variable, Variables, Constraints
 from typing import Optional
 from iotools import IOTools
@@ -9,7 +10,7 @@ OUTPUT_PATH = "../test/Putput1.txt"
 def main():
   def isComplete() -> bool:
     nonlocal CSP
-    return all[[v.value != -1 for v in CSP[0]]]
+    return all([var.value != -1 for var in CSP[0].values()])
 
   def getUnassignedVariable() -> Variable:
     nonlocal CSP
@@ -53,23 +54,26 @@ def main():
     return min_degree_var
 
   def isConsistent(variable: Variable) -> bool:
-    return all([constraint.evaluate(constraint.variables) for constraint in variable.constraints])
+    return all([constraint.evaluate(*constraint.variables) for constraint in variable.constraints])
   
   def solveCSP() -> bool:
     nonlocal CSP
     variables = CSP[0]
   
     def backtrack() -> bool:
-      if isComplete(variables):
+      # printVars(variables)
+      if isComplete():
         return True
       variable = getUnassignedVariable()
+      print(variable.name)
       for v in variable.domain:
         variable.value = v
-        if isConsistent(variable):
-          if backtrack():
-            return True
+        if isConsistent(variable) and backtrack():
+          return True
         variable.value = -1
       return False
+
+    return backtrack()
     
   io = IOTools()
   CSP = io.readCSP(INPUT_PATH)
