@@ -1,5 +1,6 @@
+from collections import defaultdict
 from typing import List
-from constraintFunction import allDiffConstraint, additionConstraint
+from constraintFunction import allDiffConstraint, generateAdditionConstraint
 from interface import CSP, Constraint, Variables, Variable
 
 class IOTools:
@@ -37,15 +38,26 @@ class IOTools:
     ## same digit addition
     for i in range(len(addsum)):
       relevantVars = [variables[addsum[-i-1]]]
+      kwargs = {
+        "result": variables[addsum[-i-1]].name,
+        "prevCarry": "",
+        "nextCarry": "",
+        "addend1": "",
+        "addend2": "",
+      }
       if i > 0:
         relevantVars.append(variables["C" + str(i)])
+        kwargs["prevCarry"] = variables["C" + str(i)].name
       if len(addsum)-1 > i:
         relevantVars.append(variables["C" + str(i+1)])
+        kwargs["nextCarry"] = variables["C" + str(i+1)].name
       if len(addend1) > i:
         relevantVars.append(variables[addend1[-i-1]])
+        kwargs["addend1"] = variables[addend1[-i-1]].name
       if len(addend2) > i:
         relevantVars.append(variables[addend2[-i-1]])
-      digitAdd = Constraint(variables=relevantVars, evaluate=additionConstraint)
+        kwargs["addend2"] = variables[addend2[-i-1]].name
+      digitAdd = Constraint(variables=relevantVars, evaluate=generateAdditionConstraint(**kwargs))
       for var in relevantVars:
         var.constraints.append(digitAdd)
     return (variables, constraints)

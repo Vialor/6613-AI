@@ -2,6 +2,9 @@ from interface import CSP, Variable, Variables, Constraints
 from typing import Optional
 from iotools import IOTools
 
+INPUT_PATH = "../test/Input1.txt"
+OUTPUT_PATH = "../test/Putput1.txt"
+
 
 def main():
   def isComplete() -> bool:
@@ -50,10 +53,7 @@ def main():
     return min_degree_var
 
   def isConsistent(variable: Variable) -> bool:
-    for constraint in variable.constraints:
-      if not constraint.evaluate():
-        return False
-    return True
+    return all([constraint.evaluate(constraint.variables) for constraint in variable.constraints])
   
   def solveCSP() -> bool:
     nonlocal CSP
@@ -72,10 +72,9 @@ def main():
       return False
     
   io = IOTools()
-  CSP = io.readCSP()
-  success = solveCSP()
-  if success:
-    io.writeAnswer(CSP[0])
+  CSP = io.readCSP(INPUT_PATH)
+  if solveCSP():
+    io.writeAnswer(CSP[0], OUTPUT_PATH)
   else:
     print("No solution.")
 
